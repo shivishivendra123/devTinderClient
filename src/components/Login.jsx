@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 function Login() {
     const [isUserPresent, setisUserPresent] = useState(true)
     const [skills, setSkills] = useState([])
+    const [signUp,setSignUp] = useState(false)
     const email = useRef();
     const password = useRef();
     const firstName = useRef();
@@ -47,7 +48,10 @@ function Login() {
             })
 
             const res = await sign_up_req.json()
-            console.log(res)
+            setSignUp(true)
+            setTimeout(()=>{
+                setSignUp(false)
+            },5000)
         }
         catch (err) {
 
@@ -198,11 +202,15 @@ function Login() {
                 <div className="flex justify-between">
                     <h1 className="mx-7 my-3">{isUserPresent ? "New User ?" : "Already a user ?"}</h1>
                     <button className="btn btn-neutral" onClick={handleStateChange}>{isUserPresent ? "Sign Up" : "Login"}</button>
-                    <div className="toast toast-top toast-center">
-                        <div className="alert alert-info">
-                            <span>New mail arrived.</span>
-                        </div>
-                    </div>
+                    {
+                        signUp?(<div className="toast toast-top toast-center">
+                        
+                            <div className="alert alert-info">
+                                <span>Sign Up Success</span>
+                            </div>
+                        </div>):null
+                    }
+                    
                 </div>
 
 
