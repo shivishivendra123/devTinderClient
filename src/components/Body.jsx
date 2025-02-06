@@ -44,8 +44,8 @@
                 <>
                 <div className="flex flex-wrap mx-40">
                 { 
-                    feedData.map((feed,index)=>{
-                        return <UserCard user = { feed }/>
+                    feedData.map((feed_,index)=>{
+                        return <UserCard user = { feed_} fun = {feed}/>
                     })
                 }
                 
