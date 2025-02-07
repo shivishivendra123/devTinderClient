@@ -1,84 +1,61 @@
 import { useEffect, useRef, useState } from "react"
+import Chat from "./chat"
 
 const ChatView = ()=>{
-    const [chatStore,setChatStore] = useState([])
-    const message = useRef()
-    const [chatWith,setchatWith] = useState("")
-    const fetchChats = async()=>{
-        const all_chats = await fetch('http://localhost:4000/v1/getallmessage/'+chatWith,{
-            method: "GET",
-            credentials: "include", 
+    
+    const [myConnections, SetmyConnectionsount] = useState([])
+    const [selectChat, setSelectChat] = useState("")
+  
+    const my_connections = async()=>{
+        const request = await fetch('http://localhost:4000/v1/user/connections',{
+            method:'GET',
+            credentials:'include',
         })
 
-        const data = await all_chats.json()
-        setChatStore(data.all_messages)
-       
-    }
-
-    const handleChatChangeShivendra = ()=>{
-        setchatWith("679e691830cb1212725f1966")
-    }
-
-    const handleChatChangeHobart = ()=>{
-        setchatWith("679bbdf4416a86ab0d0dffe0")
-    }
-
-    const sendMessage = async()=>{
-        const message_to_send = message.current.value
-        const send_message = await fetch('http://localhost:4000/v1/send/message/'+chatWith,{
-            method:"POST",
-            headers: {
-                "Content-Type": "application/json",
-              },
-            credentials:"include",
-            body: JSON.stringify({
-                message_text:message_to_send
-              }),
-        })
-        fetchChats()
-        console.log(send_message)
+        let response = await request.json()
+        console.log(response.data)
+        SetmyConnectionsount(response.data)
     }
 
     useEffect(()=>{
-        fetchChats()
+        my_connections()
     },[])
 
+
     return(
-        <div>
-        <div>
+        <>
+            <div className="flex">
+
             
-            <button className="btn btn-neutral" onClick={handleChatChangeShivendra}>Chat with Shivendra</button>
-            <button className="btn btn-neutral" onClick={handleChatChangeHobart}>Chat with Hobart</button>
-        </div>
-            {   chatStore.length>0?(
-                chatStore.map((chat,index)=>{
-                    return(
-                        <div key={index} className="flex mx-50 h-[]">
-                    {chat.fromId === chatWith ? (
-                        <div className="bg-red-900 my-3 rounded">
-                       
-                       <p>{chat.message_text}</p> 
-                       </div>
-                    ) : (
-                       
-                        <div className="mx-50 bg-blue-800 my-3 rounded">
-                       
-                       <p>{chat.message_text}</p> 
-                       </div>
-                    )}
-                </div>
-                    )
-                    
-                    
-                })
-            ):null
+            {
                 
+                myConnections.length>0?(
+                    <div className="mx-10">
+                        {
+                            myConnections.map((connect,index)=>{
+                                return (
+                                    <div className="w-150 bg-green-900 h-10 p-2 my-2 cursor-pointer" id = {connect._id} onClick={()=>setSelectChat(connect._id)}>
+                                        <h1>
+                                            { connect.firstName + " "+ connect.lastName}
+
+                                        </h1>
+                                    </div>
+                                )
+                            })
+                        }
+                    </div>
+                ):null
             }
-            <div className="mx-45 mb-30">
-            <input type="text" placeholder="Type your password...." ref={message} className="input my-2" />
-            <button className="btn btn-neutral" onClick={sendMessage}>Send</button>
+            <div>
+
+                
+                {
+                    selectChat == "" ?null:(<Chat to={selectChat} />)
+                }
+                
             </div>
-        </div>
+            </div>
+        </>
     )
 }
 

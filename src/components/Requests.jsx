@@ -22,12 +22,12 @@ function Requests() {
 
     return (
 
-        req.length>0?(
+        req?(
             <>
             {
                 req.map((reqs,index)=>{
 
-                    <ConnectionCard  req_= {reqs} />
+                    return <ConnectionCard  req_= {reqs} />
                 })
             }
             
