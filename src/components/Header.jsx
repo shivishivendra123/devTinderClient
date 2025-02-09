@@ -9,6 +9,7 @@ const Header = ()=>{
   const user_crd = useSelector((store) => store.user)
   const navigate = useNavigate()
   const handleLogout = async()=>{
+    
     const logout = await fetch(BASE_URL+'/v1/logout',{
       method:'POST',
       credentials:'include',
@@ -23,7 +24,7 @@ const Header = ()=>{
 
   const check_auth = async()=>{
     try{
-      let user_data = await fetch("BASE_URL+'/v1/profile/view",{
+      let user_data = await fetch(BASE_URL+'/v1/profile/view',{
         method:'GET',
         credentials: "include", 
       })
