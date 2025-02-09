@@ -7,7 +7,7 @@ function Requests() {
 
 
     const fetch_request = async () => {
-        let response = await fetch('http://localhost:4000/v1/user/connections/received', {
+        let response = await fetch('http://10.0.0.177:4000/v1/user/connections/received', {
             method: 'GET',
             credentials: 'include'
         })

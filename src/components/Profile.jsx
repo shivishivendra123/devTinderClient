@@ -17,7 +17,7 @@ function Profile() {
     const user_found = user?.user_found
 
     const handleUpdateButton = async () => {
-        const request = await fetch('http://localhost:4000/v1/profile/edit', {
+        const request = await fetch('http://10.0.0.177:4000/v1/profile/edit', {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

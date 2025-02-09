@@ -16,7 +16,7 @@ const Chat = ({ to }) => {
     let sender = user_found_.user_found.firstName
     
     const fetchChats = async() =>{
-        let response = await fetch('http://localhost:4000/v1/requestAllChats/'+to,{
+        let response = await fetch('http://10.0.0.177:4000/v1/requestAllChats/'+to,{
             method:'GET',
             credentials:'include',
             headers: {
@@ -62,7 +62,7 @@ const Chat = ({ to }) => {
             console.log(message)
             setTimeout(()=>{
                 scrollToBottom()
-            },200)
+            },500)
         })
 
         
@@ -82,11 +82,23 @@ const Chat = ({ to }) => {
                 <h1>
                     Your chats
                 </h1>
-                <div id="chat-container" className="border-2 border-solid h-150 w-100 overflow-scroll">
+                <div id="chat-container" className="border-2 border-solid h-180 w-200 overflow-scroll">
                     {
                         allChats.map((message, index) => {
-                            return (<h1>
-                                <div className="chat chat-start">
+                            
+                            return (
+
+                                    message.senderId.firstName == sender ?(
+                                        <div className="chat chat-end">
+                                    <div className="chat-header">
+                                        {message.senderId.firstName}
+                                        <time className="text-xs opacity-50">{parseInt((new Date() -  new Date(message.createdAt))/(1000*60)) + " "+ "mins"}</time>
+                                    </div>
+                                    <div className="chat-bubble">{message.text}</div>
+                                    <div className="chat-footer opacity-50">Seen</div>
+                                </div>
+                                    ):(
+                                        <div className="chat chat-start">
                                     <div className="chat-header">
                                         {message.senderId.firstName}
                                         <time className="text-xs opacity-50">2 hours ago</time>
@@ -94,7 +106,9 @@ const Chat = ({ to }) => {
                                     <div className="chat-bubble">{message.text}</div>
                                     <div className="chat-footer opacity-50">Seen</div>
                                 </div>
-                            </h1>)
+                                    )
+                                
+                            )
                         })
                     }
                 </div>

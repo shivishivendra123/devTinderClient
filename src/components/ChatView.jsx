@@ -7,7 +7,7 @@ const ChatView = ()=>{
     const [selectChat, setSelectChat] = useState("")
   
     const my_connections = async()=>{
-        const request = await fetch('http://localhost:4000/v1/user/connections',{
+        const request = await fetch('http://10.0.0.177:4000/v1/user/connections',{
             method:'GET',
             credentials:'include',
         })

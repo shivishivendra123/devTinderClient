@@ -11,7 +11,7 @@ const ConnectionCard = ({req_})=>{
     },[])
 
     const respond = async(id,status)=>{
-        const request = await fetch('http://localhost:4000/v1/request/review/'+status+'/'+id,{
+        const request = await fetch('http://10.0.0.177:4000/v1/request/review/'+status+'/'+id,{
                 method:"POST",
                 credentials:'include',
                 headers: {

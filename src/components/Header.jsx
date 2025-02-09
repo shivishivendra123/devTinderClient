@@ -8,7 +8,7 @@ const Header = ()=>{
   const user_crd = useSelector((store) => store.user)
   const navigate = useNavigate()
   const handleLogout = async()=>{
-    const logout = await fetch('http://localhost:4000/v1/logout',{
+    const logout = await fetch('http://10.0.0.177:4000/v1/logout',{
       method:'POST',
       credentials:'include',
       headers: {
@@ -22,7 +22,7 @@ const Header = ()=>{
 
   const check_auth = async()=>{
     try{
-      let user_data = await fetch("http://localhost:4000/v1/profile/view",{
+      let user_data = await fetch("http://10.0.0.177:4000/v1/profile/view",{
         method:'GET',
         credentials: "include", 
       })
