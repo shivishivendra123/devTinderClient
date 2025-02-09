@@ -6,10 +6,12 @@ import Profile from './components/Profile'
 import Login from './components/Login'
 import Connections from './components/Connections'
 import Requests from './components/Requests'
+
 import { Provider, useDispatch } from 'react-redux'
 import appStore from './utils/appStore'
 import { addUser } from './components/slices/userSlice'
 import Body from './components/Body'
+import ChatView from './components/ChatView'
 function App() {
   //const [count, setCount] = useState(0)
   
