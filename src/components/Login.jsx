@@ -30,7 +30,7 @@ function Login() {
 
     const handleSignUp = async () => {
         try {
-            const sign_up_req = await fetch("BASE_URL+'/v1/signup", {
+            const sign_up_req = await fetch(BASE_URL+'/v1/signup', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -65,7 +65,7 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            const request = await fetch("BASE_URL+'/v1/signin", {
+            const request = await fetch(BASE_URL+'/v1/signin', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
