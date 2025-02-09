@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import creatSocketConnection from "../utils/socketConnect"
 import { useSelector } from "react-redux"
 
-const Chat = ({ to }) => {
+const ChatPersonal = ({ to }) => {
 
     const [message_, setMessage_] = useState("")
     const [received, setReceived] = useState([])
@@ -125,4 +125,4 @@ const Chat = ({ to }) => {
     )
 }
 
-export default Chat
+export default ChatPersonal

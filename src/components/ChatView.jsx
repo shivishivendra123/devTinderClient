@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import Chat from './chat'
+import Chat from "./ChatPersonal"
 
 const ChatView = ()=>{
     
@@ -50,7 +50,7 @@ const ChatView = ()=>{
 
                 
                 {
-                    selectChat == "" ?null:(<Chat to={selectChat} />)
+                    selectChat == "" ?null:(<ChatPersonal to={selectChat} />)
                 }
                 
             </div>
