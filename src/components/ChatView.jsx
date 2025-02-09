@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react"
-import Chat from "./chat"
+import Chat from './chat'
 
 const ChatView = ()=>{
     
