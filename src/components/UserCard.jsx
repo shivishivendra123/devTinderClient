@@ -1,4 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
+import BASE_URL from '../utils/constant'
+
 const UserCard = ({ user , fun}) => {
     console.log(user)
     const crr_user = useSelector((store)=>store.user)
@@ -6,7 +8,7 @@ const UserCard = ({ user , fun}) => {
     const respond = async(id,status)=>{
         console.log(user._id)
 
-        const res_data = await fetch('http://10.0.0.177:4000/v1/request/send/'+status+'/'+id,{
+        const res_data = await fetch(BASE_URL+'/v1/request/send/'+status+'/'+id,{
             method:"POST",
             credentials:'include',
             headers: {

@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import Chat from "./ChatPersonal"
+import BASE_URL from '../utils/constant'
 
 const ChatView = ()=>{
     
@@ -7,7 +8,7 @@ const ChatView = ()=>{
     const [selectChat, setSelectChat] = useState("")
   
     const my_connections = async()=>{
-        const request = await fetch('http://10.0.0.177:4000/v1/user/connections',{
+        const request = await fetch(BASE_URL+'/v1/user/connections',{
             method:'GET',
             credentials:'include',
         })
@@ -50,7 +51,7 @@ const ChatView = ()=>{
 
                 
                 {
-                    selectChat == "" ?null:(<ChatPersonal to={selectChat} />)
+                    selectChat == "" ?null:(<Chat to={selectChat} />)
                 }
                 
             </div>

@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "./slices/userSlice";
 import { useNavigate } from "react-router-dom";
+import BASE_URL from '../utils/constant'
 
 function Login() {
     const [isUserPresent, setisUserPresent] = useState(true)
@@ -29,7 +30,7 @@ function Login() {
 
     const handleSignUp = async () => {
         try {
-            const sign_up_req = await fetch("http://10.0.0.177:4000/v1/signup", {
+            const sign_up_req = await fetch("BASE_URL+'/v1/signup", {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -64,7 +65,7 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            const request = await fetch("http://10.0.0.177:4000/v1/signin", {
+            const request = await fetch("BASE_URL+'/v1/signin", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

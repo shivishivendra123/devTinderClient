@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import creatSocketConnection from "../utils/socketConnect"
 import { useSelector } from "react-redux"
+import BASE_URL from '../utils/constant'
 
 const ChatPersonal = ({ to }) => {
 
@@ -16,7 +17,7 @@ const ChatPersonal = ({ to }) => {
     let sender = user_found_.user_found.firstName
     
     const fetchChats = async() =>{
-        let response = await fetch('http://10.0.0.177:4000/v1/requestAllChats/'+to,{
+        let response = await fetch(BASE_URL+'/v1/requestAllChats/'+to,{
             method:'GET',
             credentials:'include',
             headers: {

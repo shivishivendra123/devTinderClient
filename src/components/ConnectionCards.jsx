@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import BASE_URL from '../utils/constant'
 
 const ConnectionCard = ({req_})=>{
 
@@ -11,7 +12,7 @@ const ConnectionCard = ({req_})=>{
     },[])
 
     const respond = async(id,status)=>{
-        const request = await fetch('http://10.0.0.177:4000/v1/request/review/'+status+'/'+id,{
+        const request = await fetch(BASE_URL+'/v1/request/review/'+status+'/'+id,{
                 method:"POST",
                 credentials:'include',
                 headers: {

@@ -1,5 +1,6 @@
     import { useEffect, useState } from "react"
     import UserCard from "./UserCard"
+    import BASE_URL from '../utils/constant'
 
     const Body = () =>{
 
@@ -8,7 +9,7 @@
         const [page,setPage] = useState(1)
 
         const feed = async()=>{
-            let feed_data = await fetch('http://10.0.0.177:4000/v1/users/feed?page='+page+ '&limit=10',{
+            let feed_data = await fetch(BASE_URL+'/v1/users/feed?page='+page+ '&limit=10',{
                 method:'GET',
                 credentials:'include'
             })
