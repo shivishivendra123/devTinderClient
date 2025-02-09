@@ -8,18 +8,45 @@ const Chat = ({ to }) => {
     const [received, setReceived] = useState([])
     const [sender_, setSender_] = useState("")
 
+    const [allChats,setAllChats] = useState([])
 
     let user_found = useSelector((store) => store.user)
     user_found = user_found.user_found._id
     let user_found_ = useSelector((store) => store.user)
     let sender = user_found_.user_found.firstName
+    
+    const fetchChats = async() =>{
+        let response = await fetch('http://localhost:4000/v1/requestAllChats/'+to,{
+            method:'GET',
+            credentials:'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+
+        response = await response.json()
+        setAllChats(response.chat)
+        scrollToBottom()
+
+    }
+
+    function scrollToBottom() {
+        const chatContainer = document.getElementById('chat-container');
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: 'smooth' // Smooth scrolling
+        });
+      }
 
     const sendMessage = () => {
         let socket = creatSocketConnection();
         socket.emit('sendmessage', { sender, message_, user_found, to })
+        scrollToBottom()
+
     }
 
     useEffect(() => {
+        fetchChats()
         const socket = creatSocketConnection();
         try {
             socket.emit('joinChat', { user_found, to })
@@ -29,14 +56,23 @@ const Chat = ({ to }) => {
         }
 
         socket.on('messageReceived', ({ sender, message }) => {
-            setReceived((received) => [...received, { sender, message }])
+            setAllChats((received) => [...received, { senderId:{
+                firstName:sender
+            }, text:message }])
             console.log(message)
-            setSender_(sender)
+            setTimeout(()=>{
+                scrollToBottom()
+            },200)
         })
+
+        
 
         return () => {
             socket.disconnect()
         }
+
+        
+
 
     }, [user_found, to])
 
@@ -46,16 +82,16 @@ const Chat = ({ to }) => {
                 <h1>
                     Your chats
                 </h1>
-                <div className="border-2 border-solid h-150 w-100">
+                <div id="chat-container" className="border-2 border-solid h-150 w-100 overflow-scroll">
                     {
-                        received.map((message, index) => {
+                        allChats.map((message, index) => {
                             return (<h1>
                                 <div className="chat chat-start">
                                     <div className="chat-header">
-                                        {message.sender}
+                                        {message.senderId.firstName}
                                         <time className="text-xs opacity-50">2 hours ago</time>
                                     </div>
-                                    <div className="chat-bubble">{message.message}</div>
+                                    <div className="chat-bubble">{message.text}</div>
                                     <div className="chat-footer opacity-50">Seen</div>
                                 </div>
                             </h1>)
