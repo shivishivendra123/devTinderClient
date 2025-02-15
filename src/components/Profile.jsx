@@ -15,7 +15,7 @@ function Profile() {
     const [about,setAbout] = useState('');
     const [age,setAge] = useState('');
     const user = useSelector((store) => store.user)
-    const user_found = user?.user_found
+    //const user_found = user?.user_found
 
     const handleUpdateButton = async () => {
         const request = await fetch(BASE_URL+'/v1/profile/edit', {
@@ -45,12 +45,12 @@ function Profile() {
 
     useEffect(() => {
         if (user) {
-            setFirstName(user_found.firstName)
-            setLastName(user_found.lastName)
-            setAbout(user_found.about)
-            setAge(user_found.age)
-            setGender(user_found.gender)
-            setSkills([...user_found?.skills])
+            setFirstName(user.firstName)
+            setLastName(user.lastName)
+            setAbout(user.about)
+            setAge(user.age)
+            setGender(user.gender)
+            setSkills([...user?.skills])
         }
 
     }, [user])

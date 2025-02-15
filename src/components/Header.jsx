@@ -33,8 +33,7 @@ const Header = ()=>{
       }
       user_data = await user_data.json()
       console.log(user_data)
-      dispatch(addUser(user_data))
-      console.log(user_crd)
+      dispatch(addUser(user_data.user_found))
     }
    
     catch(err){
@@ -65,7 +64,7 @@ const Header = ()=>{
       
       {user_crd?(<li className="mx-6">
         <details>
-          <summary>{user_crd?user_crd.user_found?.firstName || "scs":null}</summary>
+          <summary>{user_crd?user_crd.firstName || "scs":null}</summary>
           <ul className="bg-base-100 rounded-t-none p-2">
           <li><Link to="/profile">Profile</Link></li>
             <li><a onClick={handleLogout}>Logout</a></li>

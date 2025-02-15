@@ -12,9 +12,10 @@ const ChatPersonal = ({ to }) => {
     const [allChats,setAllChats] = useState([])
 
     let user_found = useSelector((store) => store.user)
-    user_found = user_found.user_found._id
+
+    user_found = user_found._id
     let user_found_ = useSelector((store) => store.user)
-    let sender = user_found_.user_found.firstName
+    let sender = user_found_.firstName
     
     const fetchChats = async() =>{
         let response = await fetch(BASE_URL+'/v1/requestAllChats/'+to,{

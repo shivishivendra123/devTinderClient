@@ -81,7 +81,7 @@ function Login() {
                 throw new Error("Invalid User name and Password")
             }
             const result = await request.json()
-            dispatch(addUser(result))
+            dispatch(addUser(result.user_cred))
 
 
             navigate('/feed')
