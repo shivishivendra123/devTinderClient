@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import BASE_URL from '../utils/constant'
 
-const ConnectionCard = ({req_})=>{
+const ConnectionCard = ({req_,fetch_request})=>{
 
     console.log(req_.fromUserId)
 
@@ -22,9 +22,9 @@ const ConnectionCard = ({req_})=>{
      
             const response = await request.json()
 
-            console.log(respond)
+            console.log(response)
 
-            
+            fetch_request()
     }
 
     return(

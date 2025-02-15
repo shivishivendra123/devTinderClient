@@ -28,7 +28,7 @@ function Requests() {
             {
                 req.map((reqs,index)=>{
 
-                    return <ConnectionCard  req_= {reqs} />
+                    return <ConnectionCard  req_= {reqs} fetch_request={fetch_request} />
                 })
             }
             
