@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react"
 import creatSocketConnection from "../utils/socketConnect"
 import { useSelector } from "react-redux"
+import BASE_URL from "../utils/constant"
 
 const ChatGroup = ({to})=>{
 
@@ -17,21 +18,40 @@ const ChatGroup = ({to})=>{
        
     }
 
+    const fetchGroupChats = async()=>{
+        const request = await fetch(BASE_URL+"/v1/getMyGroupChat/"+to,{
+            method:'GET',
+            credentials:'include'
+        })
+
+        const response = await request.json()
+
+        console.log(response.chats)
+        setAllGroupChats(response.chats)
+    }
+
     useEffect(()=>{
         let socket = creatSocketConnection()
         socket.emit('joinGroupChat' , {to})
 
-        socket.on('groupMessageRec',({sender_message,mess_rec})=>{
+        socket.on('groupMessageRec',({sender_message,mess_rec,firstName})=>{
             console.log(sender_message+mess_rec)
-            setAllGroupChats((prev)=>[...prev,mess_rec])
+            setAllGroupChats((prev)=>[...prev,{
+                senderId:{
+                    firstName:firstName,
+                },
+                text:mess_rec,
+                createdAt:new Date()
+            }])
         })
 
-        console.log("axaxa")
+        // setAllGroupChats([])
+        fetchGroupChats()
 
         return () => {
             socket.disconnect()
         }   
-    },[])
+    },[to])
 
     return(
         <div>
@@ -45,10 +65,10 @@ const ChatGroup = ({to})=>{
                             return (
                                 <div className="chat chat-start">
                                     <div className="chat-header">
-                                        
-                                        <time className="text-xs opacity-50">2 hours ago</time>
+                                        <h1>{chat.senderId.firstName}</h1>
+                                        <time className="text-xs opacity-50">{parseInt((new Date() -  new Date(chat.createdAt))/(1000*60)) + " "+ "mins"}</time>
                                     </div>
-                                    <div className="chat-bubble">{chat}</div>
+                                    <div className="chat-bubble">{chat.text}</div>
                                     <div className="chat-footer opacity-50">Seen</div>
                                 </div>
                             )

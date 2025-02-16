@@ -8,13 +8,13 @@ const ChatView = () => {
 
     const [myConnections, SetmyConnectionsount] = useState([])
     const [selectChat, setSelectChat] = useState("")
-    const [selectGroup,setSelectGroup] = useState("")
-    const [myGroups,setMyGroups] = useState([])
+    const [selectGroup, setSelectGroup] = useState("")
+    const [myGroups, setMyGroups] = useState([])
     const grName = useRef()
 
     const [groupArr, setGroupArr] = useState([])
     const [groupNameArr, setNameGroupArr] = useState([])
-    const user = useSelector((store)=>store.user)
+    const user = useSelector((store) => store.user)
 
     const addToGroup = (id, firstName) => {
         setGroupArr((prev) => [...prev, id])
@@ -32,11 +32,11 @@ const ChatView = () => {
         SetmyConnectionsount(response.data)
     }
 
-    const my_groups = async()=>{
+    const my_groups = async () => {
 
-        const request = await fetch(BASE_URL + '/v1/getMyGroups',{
-            method:'GET',
-            credentials:'include'
+        const request = await fetch(BASE_URL + '/v1/getMyGroups', {
+            method: 'GET',
+            credentials: 'include'
         })
 
         const response = await request.json()
@@ -60,16 +60,16 @@ const ChatView = () => {
 
         const request = await fetch(BASE_URL + '/v1/group/createGroup', {
             method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                credentials: "include",
-                body: JSON.stringify({
-                    groupName: grName.current.value,
-                    participants: [...participants,user._id]
-                }),
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: "include",
+            body: JSON.stringify({
+                groupName: grName.current.value,
+                participants: [...participants, user._id]
+            }),
 
-            
+
         })
 
         const response = await request.json()
@@ -124,55 +124,84 @@ const ChatView = () => {
             </div>
             <div className="flex">
 
-                 <div>       
-                {
-
-                    myConnections.length > 0 ? (
-                        <div className="mx-10">
-                            {
-                                myConnections.map((connect, index) => {
-                                    return (
-                                        <div className="w-150 bg-green-900 h-10 p-2 my-2 cursor-pointer rounded-md" id={connect._id} onClick={() => {setSelectChat(connect._id)
-                                            setSelectGroup("")
-                                        }}>
-                                            <h1>
-                                                {connect.firstName + " " + connect.lastName}
-
-                                            </h1>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    ) : null
-
-                    
-                }
-                {
-                    myGroups.length>0?(
-                        <div className="mx-10">
-                            {
-                                myGroups.map((group, index) => {
-                                    return (
-                                        <div className="w-150 bg-green-900 h-10 p-2 my-2 cursor-pointer rounded-md" onClick={() => {setSelectGroup(group._id)
-
-                                        }}>
-                                            <h1>
-                                                {group.name}
-
-                                            </h1>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </div>
-                    ):null
-                }
-                </div>    
                 <div>
                     {
-                        selectGroup == ""?(selectChat == "" ? null : (<Chat to={selectChat} />)):<ChatGroup to={selectGroup}/>
-                        
+
+                        myConnections.length > 0 ? (
+                            <div className="mx-10">
+                                {
+                                    myConnections.map((connect, index) => {
+                                        return (
+                                            <div className="w-150 bg-green-900 h-10 p-2 my-2 cursor-pointer rounded-md" id={connect._id} onClick={() => {
+                                                setSelectChat(connect._id)
+                                                setSelectGroup("")
+                                            }}>
+                                                <h1>
+                                                    {connect.firstName + " " + connect.lastName}
+
+                                                </h1>
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        ) : null
+
+
+                    }
+                    {
+                        myGroups.length > 0 ? (
+                            <div className="mx-10">
+                                {
+                                    myGroups.map((group, index) => {
+                                        return (
+                                            <div className="w-150 bg-green-900 h-15 p-2 my-2 cursor-pointer rounded-md" onClick={() => {
+                                                setSelectGroup(group._id)
+                                                console.log("acaca")
+                                            }}>
+                                                <div className="flex">
+                                                <div>
+                                                    <div className="avatar-group -space-x-2 rtl:space-x-reverse w-40 h-10">
+                                                        <div className="avatar">
+                                                            <div className="w-12">
+                                                                <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="avatar">
+                                                            <div className="w-12">
+                                                                <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                                            </div>
+                                                        </div>
+                                                        <div className="avatar">
+                                                            <div className="w-12">
+                                                                <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                                                            </div>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <h1>
+
+                                                        {group.name}
+
+                                                    </h1>
+                                                </div>
+                                                </div>
+                                               
+
+                                            </div>
+                                        )
+                                    })
+                                }
+                            </div>
+                        ) : null
+                    }
+                </div>
+                <div>
+                    {
+                        selectGroup == "" ? (selectChat == "" ? null : (<Chat to={selectChat} />)) : <ChatGroup to={selectGroup} />
+
                     }
                 </div>
             </div>
