@@ -3,6 +3,7 @@ import { Link, Outlet, useNavigate } from "react-router-dom"
 import { addUser } from "./slices/userSlice"
 import { useEffect } from "react"
 import BASE_URL from '../utils/constant'
+import creatSocketConnection from "../utils/socketConnect"
 
 const Header = ()=>{
   const dispatch = useDispatch()
@@ -32,8 +33,14 @@ const Header = ()=>{
         throw new Error("User not logged In")
       }
       user_data = await user_data.json()
-      console.log(user_data)
+      console.log(user_data.user_found._id)
       dispatch(addUser(user_data.user_found))
+      
+      let socket = creatSocketConnection()
+      socket.emit('joinNotificationService',{room:user_data.user_found._id})
+      socket.on('connection',({notification})=>{
+            console.log(notification)
+      })
     }
    
     catch(err){
@@ -44,6 +51,7 @@ const Header = ()=>{
 
   useEffect(()=>{
     check_auth()
+
   },[])
 
   const user = useSelector((store)=>store.user)

@@ -82,7 +82,7 @@ function Login() {
             }
             const result = await request.json()
             dispatch(addUser(result.user_cred))
-
+            
 
             navigate('/feed')
         }

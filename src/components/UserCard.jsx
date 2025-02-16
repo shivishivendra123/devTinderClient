@@ -1,5 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import BASE_URL from '../utils/constant'
+import creatSocketConnection from "../utils/socketConnect"
+import { useEffect } from "react"
 
 const UserCard = ({ user , fun}) => {
     console.log(user)
@@ -17,9 +19,16 @@ const UserCard = ({ user , fun}) => {
         })
         
         console.log(await res_data.json())
+        let socket = creatSocketConnection()
+        socket.emit('joinNotificationService',{room:user._id})
+        socket.emit('sentInterestedRequest',{message:crr_user.firstName+"is interested in you",type:'connection',id:user._id})
+
         fun()
 
+       
     }
+
+
 
     return (
         <div className="w-96 shadow-sm">
@@ -29,7 +38,7 @@ const UserCard = ({ user , fun}) => {
                     alt="Shoes"
                     class="rounded-xl" />
             </figure>
-            <div className="card-body items-center text-center">
+            <div className="card-body items-center text-center" id={user._id}>
                 <h2 className="card-title">{user.firstName}</h2>
                 <p>{user.about}</p>
                 <div className="card-actions">
