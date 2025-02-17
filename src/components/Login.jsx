@@ -3,11 +3,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { addUser } from "./slices/userSlice";
 import { useNavigate } from "react-router-dom";
 import BASE_URL from '../utils/constant'
+import creatSocketConnection from "../utils/socketConnect";
+import { addnotification } from "./slices/notificationSlice";
 
 function Login() {
     const [isUserPresent, setisUserPresent] = useState(true)
     const [skills, setSkills] = useState([])
-    const [signUp,setSignUp] = useState(false)
+    const [signUp, setSignUp] = useState(false)
     const email = useRef();
     const password = useRef();
     const firstName = useRef();
@@ -30,7 +32,7 @@ function Login() {
 
     const handleSignUp = async () => {
         try {
-            const sign_up_req = await fetch(BASE_URL+'/v1/signup', {
+            const sign_up_req = await fetch(BASE_URL + '/v1/signup', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -50,9 +52,9 @@ function Login() {
 
             const res = await sign_up_req.json()
             setSignUp(true)
-            setTimeout(()=>{
+            setTimeout(() => {
                 setSignUp(false)
-            },5000)
+            }, 5000)
         }
         catch (err) {
 
@@ -65,7 +67,7 @@ function Login() {
 
     const handleLogin = async () => {
         try {
-            const request = await fetch(BASE_URL+'/v1/signin', {
+            const request = await fetch(BASE_URL + '/v1/signin', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,7 +84,14 @@ function Login() {
             }
             const result = await request.json()
             dispatch(addUser(result.user_cred))
-            
+            console.log(result.user_cred)
+            let socket = creatSocketConnection()
+            socket.emit('joinNotificationService', { room: result.user_cred._id })
+            socket.on('connection', ({ notification }) => {
+                
+                dispatch(addnotification(notification))
+                console.log(notification)
+            })
 
             navigate('/feed')
         }
@@ -204,14 +213,15 @@ function Login() {
                     <h1 className="mx-7 my-3">{isUserPresent ? "New User ?" : "Already a user ?"}</h1>
                     <button className="btn btn-neutral" onClick={handleStateChange}>{isUserPresent ? "Sign Up" : "Login"}</button>
                     {
-                        signUp?(<div className="toast toast-top toast-center">
-                        
+                        signUp ? (<div className="toast toast-top toast-center">
+
                             <div className="alert alert-info">
                                 <span>Sign Up Success</span>
                             </div>
-                        </div>):null
+                        </div>) : null
                     }
                     
+
                 </div>
 
 

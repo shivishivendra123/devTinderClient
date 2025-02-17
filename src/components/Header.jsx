@@ -1,14 +1,32 @@
 import { useDispatch, useSelector } from "react-redux"
 import { Link, Outlet, useNavigate } from "react-router-dom"
 import { addUser } from "./slices/userSlice"
-import { useEffect } from "react"
+import { useEffect,useState } from "react"
 import BASE_URL from '../utils/constant'
 import creatSocketConnection from "../utils/socketConnect"
+
 
 const Header = ()=>{
   const dispatch = useDispatch()
   const user_crd = useSelector((store) => store.user)
   const navigate = useNavigate()
+
+  const [notification, setNotification] = useState(false)
+
+    const [message,setMessage] = useState("")
+    const notify = useSelector((store) => store.notify)
+
+    useEffect(() => {
+        if (notify.length > 0) {
+            setNotification(true)
+            setMessage(notify[notify.length - 1])
+            
+            setTimeout(() => {
+                setNotification(false)
+            }, [3000])
+        }
+
+    }, [notify])
   const handleLogout = async()=>{
     
     const logout = await fetch(BASE_URL+'/v1/logout',{
@@ -35,12 +53,6 @@ const Header = ()=>{
       user_data = await user_data.json()
       console.log(user_data.user_found._id)
       dispatch(addUser(user_data.user_found))
-      
-      let socket = creatSocketConnection()
-      socket.emit('joinNotificationService',{room:user_data.user_found._id})
-      socket.on('connection',({notification})=>{
-            console.log(notification)
-      })
     }
    
     catch(err){
@@ -55,7 +67,17 @@ const Header = ()=>{
   },[])
 
   const user = useSelector((store)=>store.user)
-    return (<div>
+    return (<>
+      {
+                    notification ? (
+                        <div className="toast toast-top toast-start" id="notification">
+                            <div className="alert alert-info">
+                                <span>{message}</span>
+                            </div>
+                        </div>
+                    ) : null
+                }
+    <div>
         <div className="navbar bg-base-100 shadow-sm">
   <div className="flex-1">
     <a className="btn btn-ghost text-xl">Hii Dev</a>
@@ -84,7 +106,10 @@ const Header = ()=>{
   </div>
         </div>
         <Outlet/>
+        
     </div>
+   
+    </>
   )
 }
 
