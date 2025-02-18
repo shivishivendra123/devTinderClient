@@ -12,14 +12,12 @@ import appStore from './utils/appStore'
 import { addUser } from './components/slices/userSlice'
 import Body from './components/Body'
 import ChatView from './components/ChatView'
+
+
 function App() {
   //const [count, setCount] = useState(0)
-  
   return (
-    
     <>
-
-            
     <Provider store={appStore}>
     <Router>
       

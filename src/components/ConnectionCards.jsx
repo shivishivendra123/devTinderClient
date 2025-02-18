@@ -1,9 +1,13 @@
 import { useEffect, useState } from "react"
 import BASE_URL from '../utils/constant'
+import creatSocketConnection from "../utils/socketConnect"
+import { useSelector } from "react-redux"
 
 const ConnectionCard = ({req_,fetch_request})=>{
 
     console.log(req_.fromUserId)
+    
+    const user = useSelector((store)=>store.user)
 
     const [friend_tobe, setFriend_tobe] = useState({})
 
@@ -21,6 +25,11 @@ const ConnectionCard = ({req_,fetch_request})=>{
             })
      
             const response = await request.json()
+
+            let socket = creatSocketConnection()
+            socket.emit('joinNotificationService',{room:user._id})
+            //socket.emit('sentInterestedRequest',{message:crr_user.firstName+"is interested in you",type:'connection',id:user._id})
+            socket.emit('requestAccept',{to_user:req_.fromUserId,accept_by:user})
 
             console.log(response)
 

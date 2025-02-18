@@ -4,10 +4,12 @@ import { addUser } from "./slices/userSlice"
 import { useEffect,useState } from "react"
 import BASE_URL from '../utils/constant'
 import creatSocketConnection from "../utils/socketConnect"
+import { setSocket } from "./slices/socketSlice"
 
 
 const Header = ()=>{
   const dispatch = useDispatch()
+  
   const user_crd = useSelector((store) => store.user)
   const navigate = useNavigate()
 
@@ -27,6 +29,7 @@ const Header = ()=>{
         }
 
     }, [notify])
+
   const handleLogout = async()=>{
     
     const logout = await fetch(BASE_URL+'/v1/logout',{
@@ -53,6 +56,8 @@ const Header = ()=>{
       user_data = await user_data.json()
       console.log(user_data.user_found._id)
       dispatch(addUser(user_data.user_found))
+      
+
     }
    
     catch(err){
@@ -61,9 +66,10 @@ const Header = ()=>{
     }
   }
 
+
+
   useEffect(()=>{
     check_auth()
-
   },[])
 
   const user = useSelector((store)=>store.user)
