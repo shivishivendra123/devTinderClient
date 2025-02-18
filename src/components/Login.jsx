@@ -87,6 +87,7 @@ function Login() {
             console.log(result.user_cred)
             let socket = creatSocketConnection()
             socket.emit('joinNotificationService', { room: result.user_cred._id })
+            
             socket.on('connection', ({ notification }) => {
                 console.log(notification)
                 dispatch(addnotification(notification))
