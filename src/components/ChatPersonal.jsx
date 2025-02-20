@@ -43,6 +43,7 @@ const ChatPersonal = ({ to }) => {
     const sendMessage = () => {
         let socket = creatSocketConnection();
         socket.emit('sendmessage', { sender, message_, user_found, to })
+        socket.emit('receivedchat',{userId:to,firstName:sender,text:message_})
         scrollToBottom()
 
     }
