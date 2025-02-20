@@ -14,8 +14,7 @@ const ChatGroup = ({to})=>{
     const sendGroupMessage = ()=>{
 
         let socket = creatSocketConnection()
-        socket.emit('sendGroupMessage',{room_id:to,message:message.current.value,sender:user._id,firstName:user.firstName})
-       
+        socket.emit('sendGroupMessage',{room_id:to,message:message.current.value,sender:user._id,firstName:user.firstName})       
     }
 
     const fetchGroupChats = async()=>{
