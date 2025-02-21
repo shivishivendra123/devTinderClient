@@ -10,11 +10,13 @@ import { addnotification } from "./slices/notificationSlice"
 
 const Header = () => {
   const dispatch = useDispatch()
-
+  const [fetchedNoti,setFetchNoti] = useState(false)
   const user_crd = useSelector((store) => store.user)
   const navigate = useNavigate()
+  const [noOfNotification , setNoOfnotification] = useState(0)
 
   const [notification, setNotification] = useState(false)
+  const [listNotifications, setListNotifications] = useState([])
 
   const [message, setMessage] = useState("")
   const notify = useSelector((store) => store.notify)
@@ -28,6 +30,8 @@ const Header = () => {
         setNotification(false)
       }, [3000])
     }
+
+    
 
   }, [notify])
 
@@ -43,6 +47,36 @@ const Header = () => {
 
     dispatch(addUser(null))
     navigate('/login')
+  }
+
+  const fetchMyNotifications = async()=>{
+    if(!fetchedNoti){
+      const noti = await fetch(BASE_URL + '/v1/getMyNotifications',{
+        method:'GET',
+        credentials:'include'
+      })
+  
+      const response = await noti.json()
+  
+      console.log(response)
+      setListNotifications(response.notifications)
+      setFetchNoti(true)
+    }
+    
+
+  }
+
+  const NoOfNotifications = async()=>{
+    const noti = await fetch(BASE_URL + '/v1/countMyNotifications',{
+      method:'GET',
+      credentials:'include'
+    })
+
+    const response = await noti.json()
+
+    setNoOfnotification(response.notifications)
+
+
   }
 
   const check_auth = async () => {
@@ -79,6 +113,7 @@ const Header = () => {
 
   useEffect(() => {
     check_auth()
+    NoOfNotifications()
   }, [])
 
   const user = useSelector((store) => store.user)
@@ -105,6 +140,20 @@ const Header = () => {
               <li><Link to="/connections">My Connections</Link></li>
               <li><Link to="/Requests">Requests</Link></li>
               <li><Link to="/chats">Chats</Link></li>
+              <li className="mx-6">
+              <details onClick={()=>fetchMyNotifications()}>
+                <summary><img className="w-10" src="https://www.citypng.com/public/uploads/preview/transparent-red-flat-bell-notification-icon-701751695033975wbdrqhav11.png"></img><span>{ noOfNotification }</span></summary>
+                <ul className="rounded-t-none p-2">
+                  {
+                    listNotifications.map((ele,ind)=>{
+                      return(<li className="bg-amber-700 rounded-b-xs my-3 h-8 w-55 p-1">{
+                            ele.message
+                        }</li>)
+                    })
+                  }
+                </ul>
+              </details>
+            </li>
             </>) : null}
 
             {user_crd ? (<li className="mx-6">
