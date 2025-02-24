@@ -66,7 +66,8 @@ const ChatView = () => {
             credentials: "include",
             body: JSON.stringify({
                 groupName: grName.current.value,
-                participants: [...participants, user._id]
+                participants: [...participants, user._id],
+                created_by:user._id
             }),
 
 
@@ -89,7 +90,7 @@ const ChatView = () => {
                         {
                             myConnections.map((connect, index) => {
                                 return (
-                                    <div className="bg-green-900 h-10 p-2 my-2 cursor-pointer rounded-md" id={connect._id} onClick={() => addToGroup(connect._id, connect.firstName)}>
+                                    <div key={index} className="bg-green-900 h-10 p-2 my-2 cursor-pointer rounded-md" id={connect._id} onClick={() => addToGroup(connect._id, connect.firstName)}>
                                         <h1>
                                             {connect.firstName + " " + connect.lastName}
 
@@ -132,7 +133,7 @@ const ChatView = () => {
                                 {
                                     myConnections.map((connect, index) => {
                                         return (
-                                            <div className="w-150 bg-green-900 h-10 p-2 my-2 cursor-pointer rounded-md" id={connect._id} onClick={() => {
+                                            <div key={index} className="w-150 bg-green-900 h-10 p-2 my-2 cursor-pointer rounded-md" id={connect._id} onClick={() => {
                                                 setSelectChat(connect._id)
                                                 setSelectGroup("")
                                             }}>
@@ -155,7 +156,7 @@ const ChatView = () => {
                                 {
                                     myGroups.map((group, index) => {
                                         return (
-                                            <div className="w-150 bg-green-900 h-15 p-2 my-2 cursor-pointer rounded-md" onClick={() => {
+                                            <div key={group._id} className="w-150 bg-green-900 h-15 p-2 my-2 cursor-pointer rounded-md" onClick={() => {
                                                 setSelectGroup(group._id)
                                                 console.log("acaca")
                                             }}>
