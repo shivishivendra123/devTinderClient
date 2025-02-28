@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react"
 import creatSocketConnection from "../utils/socketConnect"
 import { useSelector } from "react-redux"
 import BASE_URL from "../utils/constant"
+import { useNavigate } from "react-router-dom"
 
 const ChatGroup = ({ to }) => {
 
@@ -10,12 +11,36 @@ const ChatGroup = ({ to }) => {
     const [groupInfo, setGroupInfo] = useState(null)
     const [myrole, setMyRole] = useState("member")
     const user = useSelector((store) => store.user)
+    const navigate = useNavigate()
 
+    const kickTheUser = (id)=>{
+        
+    }   
+
+    const ChangeTheRole = (id)=>{
+
+    }
+
+    const LeaveGroup = async(groupId)=>{
+        console.log(groupId)
+
+        const request = await fetch(BASE_URL+"/v1/leaveGroup/"+groupId,{
+            method:"POST",
+            credentials:'include'
+        })
+
+        const response = await request.json()
+        
+        console.log(response)
+
+        // window.location.reload()
+    }
 
     const sendGroupMessage = () => {
 
         let socket = creatSocketConnection()
         socket.emit('sendGroupMessage', { room_id: to, message: message.current.value, sender: user._id, firstName: user.firstName })
+        scrollToBottom()
     }
 
     const getGroupInfo = async (room_id) => {
@@ -38,6 +63,14 @@ const ChatGroup = ({ to }) => {
             }
         });
     }
+
+    function scrollToBottom() {
+        const chatContainer = document.getElementById('chat-container');
+        chatContainer.scrollTo({
+          top: chatContainer.scrollHeight,
+          behavior: 'smooth' // Smooth scrolling
+        });
+      }
 
     const fetchGroupChats = async () => {
         const request = await fetch(BASE_URL + "/v1/getMyGroupChat/" + to, {
@@ -66,6 +99,7 @@ const ChatGroup = ({ to }) => {
             }])
 
             // getMyrole()
+            scrollToBottom()
         })
 
         // setAllGroupChats([])
@@ -99,6 +133,8 @@ const ChatGroup = ({ to }) => {
                     }
                 </div>
                 <div>
+                <span className="loading loading-ball loading-lg"></span>
+                    you are not allowed to send the messages as you left the group
                     <input
                         type="text"
                         placeholder="Type here"
@@ -131,7 +167,7 @@ const ChatGroup = ({ to }) => {
                                             return (
                                                 <div>
                                                     You  ({parti.role})
-                                                    <button className="btn btn-accent w-30 ml-5 h-5">Leave Group</button>
+                                                    <button className="btn btn-accent w-30 ml-5 h-5" onClick={()=>LeaveGroup(to)}>Leave Group</button>
                                                 </div>
                                             )
                                         } else {
@@ -152,8 +188,8 @@ const ChatGroup = ({ to }) => {
                                                                 parti.userId.firstName + "     (" + parti.role + ")"
 
                                                             }
-                                                            <button className="btn btn-accent w-30 ml-5 h-5">Kick out</button>
-                                                            <button className="btn btn-accent w-30 ml-5 h-5">Make Admin</button>
+                                                            <button className="btn btn-accent w-30 ml-5 h-5" onClick={()=>kickTheUser(parti.userId._id)}>Kick out</button>
+                                                            <button className="btn btn-accent w-30 ml-5 h-5" onClick={()=>ChangeTheRole(parti.userId._id)}>Make Admin</button>
                                                         </div>
 
                                                     )
