@@ -12,9 +12,22 @@ const ChatGroup = ({ to }) => {
     const [myrole, setMyRole] = useState("member")
     const user = useSelector((store) => store.user)
     const navigate = useNavigate()
-
-    const kickTheUser = (id)=>{
-        
+    const [clickedLeaveGroup,setClickedLeaveGroup] = useState(false) 
+    const kickTheUser = async(id)=>{
+        const request = await fetch(BASE_URL+'/v1/kickOutUser',{
+            method:'POST',
+            credentials:'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body:JSON.stringify({
+                member_id:id,
+                groupId:to
+            }),
+        })
+        const response = await request.json()
+        getGroupInfo()
+        console.log(response)
     }   
 
     const ChangeTheRole = (id)=>{
@@ -32,8 +45,8 @@ const ChatGroup = ({ to }) => {
         const response = await request.json()
         
         console.log(response)
-
-        // window.location.reload()
+        setClickedLeaveGroup(true)
+        document.getElementById('close-modal').click()
     }
 
     const sendGroupMessage = () => {
@@ -133,9 +146,10 @@ const ChatGroup = ({ to }) => {
                     }
                 </div>
                 <div>
-                <span className="loading loading-ball loading-lg"></span>
-                    you are not allowed to send the messages as you left the group
-                    <input
+                {
+                    !clickedLeaveGroup? (
+                        <>
+                             <input
                         type="text"
                         placeholder="Type here"
                         className="input input-bordered input-accent w-full max-w-xs  mx-1 my-2" ref={message} />
@@ -151,7 +165,7 @@ const ChatGroup = ({ to }) => {
                         <div className="modal-box">
                             <form method="dialog">
                                 {/* if there is a button in form, it will close the modal */}
-                                <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                <button id="close-modal" className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
                             </form>
                             <div className="flex">
                                 <h1>Group Name</h1>
@@ -214,6 +228,19 @@ const ChatGroup = ({ to }) => {
                             <p className="py-4">Press ESC key or click on ✕ button to close</p>
                         </div>
                     </dialog>
+                        </>
+                    
+                    ):(
+                        
+                        <>
+                        <span className="loading loading-ball loading-lg"></span>
+                        you are not allowed to send the messages as you left the group
+                        </>
+                    )
+                }
+                    
+                    
+                   
                 </div>
             </div>
         </div>
